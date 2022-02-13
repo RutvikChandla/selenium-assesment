@@ -1,12 +1,15 @@
+
 echo_notice() {
     msg=$1
-    GREEN='\033[0;32m'
+    RED='\033[0;32m'
     NC='\033[0m' # No Color
-    printf "\n${GREEN}${msg}${NC}"
+    printf "\n${RED}${msg}${NC}"
 }
+
 
 bst_flag=0
 ip_check=0
+parallel_threads=1
 
 optspec=":c:-:"
 while getopts "$optspec" optchar; do
@@ -15,6 +18,9 @@ while getopts "$optspec" optchar; do
             case "${OPTARG}" in
                 browserstack)
                     bst_flag=1
+                    ;;
+                ip-check)
+                    ip_check=1
                     ;;
                 *)
                     if [ "$OPTERR" = 1 ] && [ "${optspec:0:1}" != ":" ]; then
@@ -37,7 +43,14 @@ else
 fi
 
 main() {
-    run_session &
+    echo_notice "Fetching status ... \n" 
+    echo ${ROOT}/status 
+    curl ${ROOT}/status | jq '.status'
+
+    for ((i = 1 ; i <= $parallel_threads ; i++)); do
+        run_session &
+    done
+
     wait
 }
 
