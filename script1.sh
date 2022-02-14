@@ -27,7 +27,9 @@ done
 if [[ $bst_flag -eq 1 ]]
 then
     echo_notice "Running session orowserstack" >&2
-    ROOT=https://rutvikchandla_2MEern:QRRxxzZRAZxqQFLsocrk@hub-cloud.browserstack.com/wd/hub
+    USERNAME="YOUR_USER_NAME"
+    ACCESSKEY="YOUR_ACCESS_KEY"
+    ROOT="https://${USERNAME}:${ACCESSKEY}@hub-cloud.browserstack.com/wd/hub"
 else
     echo_notice "Running session on selenium.." 
     ROOT=http://192.168.0.101:4444
